@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  jl-dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8888:8888"
+      - "9000:9000"
+    volumes:
+      - ..:/usr/src/app
