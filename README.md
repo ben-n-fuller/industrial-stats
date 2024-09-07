@@ -1,6 +1,8 @@
 # Introduction
 This repository contains Julia and Python code for research in industrial statistics.
 
+See the [wiki](https://github.com/ben-n-fuller/industrial-stats/wiki) for further documentation.
+
 # Usage
 The notebooks and code in this repo can be run through VS Code or in Jupyter Lab.
 
