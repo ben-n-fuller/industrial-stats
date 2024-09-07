@@ -1,5 +1,5 @@
 # Introduction
-This repository contains Julia for research in industrial statistics.
+This repository contains Julia code for research in industrial statistics.
 
 See the [wiki](https://github.com/ben-n-fuller/industrial-stats/wiki) for further documentation.
 
