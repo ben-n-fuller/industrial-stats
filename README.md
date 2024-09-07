@@ -20,8 +20,7 @@ Python installation and version management is best handled by `miniconda`. Instr
 ### Install Docker (Optional)
 To use Jupyter Lab with this project, either Linux or WSL are required.
 
-1. Install [Docker](https://docs.docker.com/engine/install/ubuntu/) (or [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) if running in WSL)
-2. 
+Install [Docker](https://docs.docker.com/engine/install/ubuntu/) (or [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) if running in WSL).
 
 ## VS Code
 1. Install the official `Jupyter` extension
