@@ -1,5 +1,6 @@
 [deps]
 Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
 LanguageServer = "2b0e0bc5-e4fd-59b4-8912-456d1b03d8d7"
 Optim = "429524aa-4258-5aef-a3af-852621145aeb"
