@@ -1,14 +1,17 @@
 module CEXCH
+
+export cexch!, cexch
+
 using LinearAlgebra
 using ThreadsX
 
-include("../model_builder/model_builder.jl")
+include("../model/model_builder.jl")
 using .ModelBuilder
 
-include("../model_builder/design_initializer.jl")
+include("../model/design_initializer.jl")
 using .DesignInitializer
 
-include("../utility/util.jl")
+include("../util/util.jl")
 using .Util
 
 function exchange(X, row, x)
@@ -103,7 +106,5 @@ function cexch(X::Array{Float64, 3}, obj_crit::Function; max_iters=1000, num_sam
     X = copy(X)
     cexch!(X, obj_crit, max_iters=max_iters, num_samples=num_samples)
 end
-
-export cexch!, cexch
 
 end

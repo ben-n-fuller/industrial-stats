@@ -9,13 +9,13 @@ using Statistics
 using Random
 
 # Internal modules
-include("../model_builder/model_builder.jl")
+include("../model/model_builder.jl")
 import .ModelBuilder
 
-include("../model_builder/design_initializer.jl")
+include("../model/design_initializer.jl")
 import .DesignInitializer
 
-include("../utility/util.jl")
+include("../util/util.jl")
 using .Util
 
 # Sample points from the simplex using the Dirichlet distribution

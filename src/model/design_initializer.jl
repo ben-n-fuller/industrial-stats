@@ -3,7 +3,7 @@ module DesignInitializer
 using LinearAlgebra
 using Random
 
-include("../utility/util.jl")
+include("../util/util.jl")
 using .Util
 
 include("./model_builder.jl")
