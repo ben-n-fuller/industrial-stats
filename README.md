@@ -20,7 +20,7 @@ julia -e "import Pkg; Pkg.activate(\".\"); Pkg.instantiate()"
 ```
 
 ## Install Conda
-The `conda` version manager is useful when installing `IJulia` for Julia-based Jupyter notebooks. Instructions for different platforms are available in the [official documentation](https://docs.anaconda.com/miniconda/).
+The `conda` environment manager is used when installing `IJulia` for Julia-based Jupyter notebooks. Instructions for different platforms are available in the [official documentation](https://docs.anaconda.com/miniconda/).
 
 ## Install Docker (Optional)
 To use Jupyter Lab with this project, either Linux or WSL are required.
