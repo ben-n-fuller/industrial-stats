@@ -40,17 +40,19 @@ end
 function save_job_result(compute_result::ComputeResult, path_prefix::String)
     ts_str = Dates.format(now(), "yyyy-mm-dd HH:MM:SS")
     file_path = joinpath(path_prefix, "$(compute_result.job.name) $ts_str.h5")
-    @info "Saving job $(compute_result.job.name) to $file_path"
+    @info "Saving job '$(compute_result.job.name)' to '$file_path'"
     h5write(file_path, compute_result.job.name, compute_result.data)
     return JobResult(compute_result.job.name, file_path)
 end
 
 function run_jobs(jobs::Vector{Job}; save_function::Function = save_job_result, path_prefix = ".")::Vector{JobResult}
+    @info "Distributing $(length(jobs)) jobs..."
     save_function_with_path = (r) -> save_function(r, path_prefix)
     pmap(save_function_with_path ∘ apply_handler_to_batch, jobs)
 end
 
 function run_jobs_no_save(jobs::Vector{Job})::Vector{ComputeResult}
+    @info "Distributing $(length(jobs)) jobs..."
     pmap(apply_handler_to_batch, jobs)
 end
 

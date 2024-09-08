@@ -1,5 +1,7 @@
 module DesignInitializer
 
+export initialize, make_initializer
+
 using LinearAlgebra
 using Random
 
@@ -61,10 +63,8 @@ function initialize(N, K, model_builder; n = 1, type="uniform")
     end
 end
 
-function initializer(N, K, model_builder; type="uniform")
+function make_initializer(N, K, model_builder; type="uniform")
     return (n) -> initialize(N, K, model_builder, n = n, type=type)
 end
-
-export initialize, initializer
 
 end
