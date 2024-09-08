@@ -1,22 +1,26 @@
 # Introduction
 This repository contains Julia code for computational research in industrial statistics.
 
+- `/src` contains a library of modules defining common operations
+- `/notebooks` contains exploratory Jupyter notebooks
+- `/examples` contains examples of code use and common workflows
+
 See the [wiki](https://github.com/ben-n-fuller/industrial-stats/wiki) for further documentation.
 
 # Usage
 The notebooks and code in this repo can be run through VS Code or in Jupyter Lab.
 
 ## Install Julia
-Julia installation and version management is best handled by the `juliaup` package. Instructions for different platforms are available in the [official repo](https://github.com/JuliaLang/juliaup).
+If Julia is not already installed, `juliaup` can be very useful for installing and managing Julia versions. Instructions for different platforms are available in the [official repo](https://github.com/JuliaLang/juliaup).
 
-Then, in the project root, install the required packages.
+Once installed, activate the local package environment in the root directory:
 
 ```
 julia -e "import Pkg; Pkg.activate(\".\")"
 ```
 
 ## Install Conda
-The conda version manager can make life a lot easier. Instructions for different platforms are available in the [official documentation](https://docs.anaconda.com/miniconda/).
+The `conda` version manager is useful when installing `IJulia` for Julia-based Jupyter notebooks. Instructions for different platforms are available in the [official documentation](https://docs.anaconda.com/miniconda/).
 
 ## Install Docker (Optional)
 To use Jupyter Lab with this project, either Linux or WSL are required.
