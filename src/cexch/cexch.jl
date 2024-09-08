@@ -11,8 +11,8 @@ using .ModelBuilder
 include("../model/design_initializer.jl")
 using .DesignInitializer
 
-include("../util/util.jl")
-using .Util
+include("../util/tensor_ops.jl")
+using .TensorOps
 
 function exchange(X, row, x)
     Xt = copy(X)
@@ -66,7 +66,7 @@ function cexch_optimize(X::Matrix{Float64}, obj_crit::Function; max_iters=1000, 
 
             # Compute scores
             scores = obj_crit(new_designs)
-            score_opt, i_opt = findmin(Util.squeeze(scores))
+            score_opt, i_opt = findmin(TensorOps.squeeze(scores))
 
             # Update the design matrix and objective value if improvement is found
             if score_opt < best_score

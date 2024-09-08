@@ -12,7 +12,7 @@ Julia installation and version management is best handled by the `juliaup` packa
 Then, in the project root, install the required packages.
 
 ```
-julia -e "import Pkg; Pkg.activate()"
+julia -e "import Pkg; Pkg.activate(\".\")"
 ```
 
 ## Install Conda

@@ -1,4 +1,4 @@
-module Util
+module TensorOps
 
 """
     squeeze(X)
