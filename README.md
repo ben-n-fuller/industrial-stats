@@ -16,7 +16,7 @@ If Julia is not already installed, `juliaup` can be very useful for installing a
 Once installed, activate the local package environment in the root directory:
 
 ```
-julia -e "import Pkg; Pkg.activate(\".\")"
+julia -e "import Pkg; Pkg.activate(\".\"); Pkg.instantiate()"
 ```
 
 ## Install Conda
