@@ -27,7 +27,7 @@ Install [Docker](https://docs.docker.com/engine/install/ubuntu/) (or [Docker Des
 1. Install the official `Jupyter` extension
 2. Install the official `Julia` language extension
 3. Run `julia -e "using IJulia; IJulia.notebook(detached=true)"` in the command line to start the Jupyter server
-4. Open a notebook and select the kernel in the top right
+4. Open the root folder in vscode, open a notebook, and select the kernel in the top right
 
 ## Jupyter Lab Setup
 1. In the `docker/` directory run `docker compose build`
