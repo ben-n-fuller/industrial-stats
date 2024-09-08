@@ -1,7 +1,7 @@
 module DistributedJobs
 
 export Job, JobResult
-export run_jobs, run_jobs_no_save, load_and_concatenate
+export run_jobs, run_jobs_no_save, load_and_concatenate, load
 
 using HDF5
 using Dates
@@ -55,8 +55,12 @@ function run_jobs_no_save(jobs::Vector{Job})::Vector{ComputeResult}
     pmap(apply_handler_to_batch, jobs)
 end
 
+function load(completed_jobs::Vector{JobResult})
+    map((res) -> h5read(res.file_name, res.name), completed_jobs)
+end
+
 function load_and_concatenate(completed_jobs::Vector{JobResult})
-    all_data = map((res) -> h5read(res.file_name, res.name), completed_jobs)
+    all_data = load(completed_jobs)
     return cat(all_data...; dims=1)
 end
 
