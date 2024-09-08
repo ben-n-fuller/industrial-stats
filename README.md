@@ -1,6 +1,10 @@
 # Introduction
 This repository contains Julia code for computational research in industrial statistics.
 
+- `/src` contains a library of modules defining common operations
+- `/notebooks` contains exploratory Jupyter notebooks
+- `/examples` contains examples of code use and common workflows
+
 See the [wiki](https://github.com/ben-n-fuller/industrial-stats/wiki) for further documentation.
 
 # Usage
