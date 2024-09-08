@@ -3,8 +3,8 @@ module DesignInitializer
 using LinearAlgebra
 using Random
 
-include("../util/util.jl")
-using .Util
+include("../util/tensor_ops.jl")
+using .TensorOps
 
 include("./model_builder.jl")
 using .ModelBuilder
@@ -28,7 +28,7 @@ function fill_invalid!(X, model_builder, init)
 
     check_invalid = (x) -> rank(x) < K
     invalids = mapslices(check_invalid, M, dims=[2,3])
-    invalid_indices = findall(Util.squeeze(invalids))
+    invalid_indices = findall(TensorOps.squeeze(invalids))
 
     # If no invalid designs, return
     if length(invalid_indices) == 0

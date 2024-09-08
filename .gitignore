@@ -1,3 +1,5 @@
 **/.ipynb_checkpoints
 **/.Trash*
 **/.virtual_documents
+*.h5
+data/

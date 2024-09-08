@@ -18,10 +18,10 @@ import .ModelBuilder
 include("../model/design_initializer.jl")
 import .DesignInitializer
 
-include("./util.jl")
-using .Util
+include("./tensor_ops.jl")
+using .TensorOps
 
-include('./sampler.jl')
+include("./sampler.jl")
 import .Sampler
 
 # Compute the volume of a polytope using the CDD library

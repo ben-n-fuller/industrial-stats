@@ -18,9 +18,10 @@ import .ModelBuilder
 include("../model/design_initializer.jl")
 import .DesignInitializer
 
-include("./util.jl")
-using .Util# Sample points from the simplex using the Dirichlet distribution
+include("./tensor_ops.jl")
+using .TensorOps 
 
+# Sample points from the simplex using the Dirichlet distribution
 function sample_simplex(N, K; rng=Random.GLOBAL_RNG)
     a = ones(K)
     sampler = Dirichlet(a)
