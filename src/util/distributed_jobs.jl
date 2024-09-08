@@ -33,8 +33,7 @@ function create_compute_result(result::Array, job::Job)
 end
 
 function apply_handler_to_batch(job::Job)
-    data = job.data_generator()
-    transformed_data = job.job_handler(data)
+    transformed_data = (job.job_handler ∘ job.data_generator)()
     return create_compute_result(transformed_data, job)
 end
 
