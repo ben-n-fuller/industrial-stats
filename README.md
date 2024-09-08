@@ -7,7 +7,7 @@ See the [wiki](https://github.com/ben-n-fuller/industrial-stats/wiki) for furthe
 The notebooks and code in this repo can be run through VS Code or in Jupyter Lab.
 
 ## Install Julia
-It is recommended to use `juliaup` to manage Julia installation and versioning. Instructions for different platforms are available in the [official repo](https://github.com/JuliaLang/juliaup).
+If Julia is not already installed, `juliaup` can be very useful for installing and managing Julia versions. Instructions for different platforms are available in the [official repo](https://github.com/JuliaLang/juliaup).
 
 Once installed, activate the local package environment in the root directory:
 
