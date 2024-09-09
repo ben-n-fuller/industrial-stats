@@ -29,11 +29,12 @@ The `conda` environment manager is used when installing `IJulia` for Julia-based
 4. Open the root folder in vscode, open a notebook, and select the kernel in the top right
 
 ## Jupyter Lab Setup (optional)
-1. In the `docker/` directory run `docker compose build`
-2. In the same directory run `docker compose up -d`
-3. Navigate to `localhost:8888/lab` in the browser to edit and run code
-
-## Install Docker (Optional)
+### Install Docker (Optional)
 To use Jupyter Lab with this project, either Linux or WSL are required.
 
 Install [Docker](https://docs.docker.com/engine/install/ubuntu/) (or [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) if running in WSL).
+
+### Build & Run
+1. In the `docker/` directory run `docker compose build`
+2. In the same directory run `docker compose up -d`
+3. Navigate to `localhost:8888/lab` in the browser to edit and run code
