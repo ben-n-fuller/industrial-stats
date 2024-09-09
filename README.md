@@ -22,20 +22,18 @@ julia -e "import Pkg; Pkg.activate(\".\"); Pkg.instantiate()"
 ## Install Conda
 The `conda` environment manager is used when installing `IJulia` for Julia-based Jupyter notebooks. Instructions for different platforms are available in the [official documentation](https://docs.anaconda.com/miniconda/).
 
-## Install Docker (Optional)
-To use Jupyter Lab with this project, either Linux or WSL are required.
-
-Install [Docker](https://docs.docker.com/engine/install/ubuntu/) (or [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) if running in WSL).
-
 ## VS Code Setup
 1. Install the official `Jupyter` extension
 2. Install the official `Julia` language extension
 3. Run `julia -e "using IJulia; IJulia.notebook(detached=true)"` in the command line to start the Jupyter server
 4. Open the root folder in vscode, open a notebook, and select the kernel in the top right
 
-## Jupyter Lab Setup
+## Jupyter Lab Setup (optional)
 1. In the `docker/` directory run `docker compose build`
 2. In the same directory run `docker compose up -d`
 3. Navigate to `localhost:8888/lab` in the browser to edit and run code
 
+## Install Docker (Optional)
+To use Jupyter Lab with this project, either Linux or WSL are required.
 
+Install [Docker](https://docs.docker.com/engine/install/ubuntu/) (or [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) if running in WSL).
