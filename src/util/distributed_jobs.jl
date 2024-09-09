@@ -15,7 +15,7 @@ struct Job
 end
 
 struct ComputeResult
-    data::Array
+    data::Any
     job::Job
 end
 
