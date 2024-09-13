@@ -1,6 +1,7 @@
 module DesignInitializer
 
 export initialize, make_initializer
+export genDesignMat_mix
 
 using LinearAlgebra
 using Random
@@ -65,6 +66,26 @@ end
 
 function make_initializer(N, K, model_builder; type="uniform")
     return (n) -> initialize(N, K, model_builder, n = n, type=type)
+end
+
+## utilities for generating design and model matrices
+function genRandDesign_mix(N, K)
+    # N:= number of points in design (nrows)
+    # K:= number of factors (ncols)
+    # generate from uniform dirichlet
+    alpha = ones(K)
+    d     = Dirichlet(alpha)
+    X     = transpose(rand(d, N))
+    # make sure smallest is bigger than 0
+    smallest = eps()^2
+    for i in 1:N
+        xt = X[i, :]
+        xt[xt .< smallest] .= smallest
+        xt = xt/sum(xt)
+        X[i, :] = xt
+    end
+
+    return X
 end
 
 end
