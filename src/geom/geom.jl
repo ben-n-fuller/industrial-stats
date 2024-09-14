@@ -1,6 +1,6 @@
 module Geom
 
-export check_polyhedron_consistency, compute_centroid, simplex_max_d, simplex_vec_outer_d_mat, hyper_polyhedron_confine
+export check_polyhedron_consistency, compute_centroid, max_d, vec_outer_d_mat, hyper_polyhedron_confine
 
 using Iterators
 

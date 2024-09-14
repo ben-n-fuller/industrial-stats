@@ -2,16 +2,16 @@ module ParticleSwarm
 
 export search_simplex
 
-import("../geom/geom.jl")
+include("../geom/geom.jl")
 using .Geom
 
-import("../geom/simplex.jl")
+include("../geom/simplex.jl")
 using .Simplex
 
-import("../sampling/gibbs_sampler.jl")
+include("../sampling/gibbs_sampler.jl")
 using .GibbsSampler
 
-import("../model/design_initializer.jl")
+include("../model/design_initializer.jl")
 using .DesignInitializer
 
 using Distributions, LinearAlgebra
@@ -46,14 +46,14 @@ function search_simplex(;
         a, b               = Geom.check_polyhedron_consistency(L, U)
         countVEF(a,b)
         centroid, vertices = Geom.compute_centroid(a,b)
-        Dmat               = Simplex.simplex_vec_outer_d_mat(vertices)
+        Dmat               = Simplex.vec_outer_d_mat(vertices)
         maxd               = maximum(Dmat)/(2*vmaxScale)
         use_bounds         = true
     else
         # maxd is particle step size
         # simplexMaxD is from centroid to vertex (too 4 decimals)
         #  so step size is factor 1/vmaxScale of that
-        maxd       = Simplex.simplex_max_d(K)/vmaxScale
+        maxd       = Simplex.max_d(K)/vmaxScale
         a          = undef
         b          = undef
         centroid   = undef
@@ -199,9 +199,9 @@ function initialize_swarm(; N, K, S, objective, order = nothing, nn, maxd, use_b
         for i in 1:S
             X0[:, :, i] = DesignInitializer.genRandDesign_mix(N, K)
             vt          = DesignInitializer.genRandDesign_mix(N, K)
-            nvt         = Simplex.simplex_norm(vt)
+            nvt         = Simplex.norm(vt)
             if nvt > maxd
-                vt = Simplex.simplex_scale(vt, maxd)
+                vt = Simplex.scale(vt, maxd)
             end
             V0[:, :, i] = vt
         end
@@ -209,9 +209,9 @@ function initialize_swarm(; N, K, S, objective, order = nothing, nn, maxd, use_b
         for i in 1:S
             X0[:, :, i] = GibbsSampler.tDirGibbs(N, a, b, undef, centroid)
             vt          = DesignInitializer.genRandDesign_mix(N, K)
-            nvt         = Simplex.simplex_norm(vt)
+            nvt         = Simplex.norm(vt)
             if nvt > maxd
-                vt = Simplex.simplex_scale(vt, maxd)
+                vt = Simplex.scale(vt, maxd)
             end
             V0[:, :, i] = vt
         end
@@ -289,28 +289,28 @@ function update_velocity_and_position(X, V, p_best, l_best, g_best, w, c1, c2, P
     for j in pset
         ## update velocity
         # inertia
-        inertia   = Simplex.simplex_multiply(V[j,:], w)
+        inertia   = Simplex.multiply(V[j,:], w)
         # cognitive
-        ct1       = Simplex.simplex_multiply(X[j,:], -1.0)
-        ct2       = Simplex.simplex_add(p_best[j,:], ct1)
+        ct1       = Simplex.multiply(X[j,:], -1.0)
+        ct2       = Simplex.add(p_best[j,:], ct1)
         ctscaler  = c1*rand(u)
-        cognitive = Simplex.simplex_multiply(ct2, ctscaler)
+        cognitive = Simplex.multiply(ct2, ctscaler)
         # social
-        st1       = Simplex.simplex_multiply(X[j,:], -1.0)
-        st2       = Simplex.simplex_add(groupbest[j,:], st1)
+        st1       = Simplex.multiply(X[j,:], -1.0)
+        st2       = Simplex.add(groupbest[j,:], st1)
         sscaler   = c2*rand(u)
-        social    = Simplex.simplex_multiply(st2, sscaler)
+        social    = Simplex.multiply(st2, sscaler)
         # velocity update
-        vt        = Simplex.simplex_add(inertia, Simplex.simplex_add(cognitive, social))
-        nvt       = Simplex.simplex_norm(vt)
+        vt        = Simplex.add(inertia, Simplex.add(cognitive, social))
+        nvt       = Simplex.norm(vt)
         if nvt > maxd
-            vt = Simplex.simplex_scale(vt, maxd)
+            vt = Simplex.scale(vt, maxd)
         end
         Vnew[j,:] = vt
         if ~use_bounds
-            Xnew[j,:] = Simplex.simplex_add(Xnew[j,:], Vnew[j,:])
+            Xnew[j,:] = Simplex.add(Xnew[j,:], Vnew[j,:])
         else
-            Xnt       = Simplex.simplex_add(Xnew[j,:], Vnew[j,:])
+            Xnt       = Simplex.add(Xnew[j,:], Vnew[j,:])
             Xnew[j,:] = Geom.hyper_polyhedron_confine(transpose(Xnt), centroid, a, b)
         end
     end

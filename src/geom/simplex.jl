@@ -1,8 +1,8 @@
 module Simplex
 
-export simplex_add, simplex_multiply, simplex_norm, simplex_vec_dist, simplex_vec_outer_d_mat, simplex_max_d, simplex_scale
+export add, multiply, norm, vec_dist, vec_outer_d_mat, max_d, scale
 
-function simplex_add(p, q)
+function add(p, q)
     eprod = p .* q
     result = eprod ./ sum(eprod)
     # just in case any values are 0
@@ -13,7 +13,7 @@ function simplex_add(p, q)
     return result
 end
 
-function simplex_multiply(p, lambda)
+function multiply(p, lambda)
     eexp = p .^ lambda
     result = eexp ./ sum(eexp)
     # just in case any values are 0
@@ -24,7 +24,7 @@ function simplex_multiply(p, lambda)
     return result
 end
 
-function simplex_norm(p)
+function norm(p)
     K = length(p)
     Mt = Matrix{Float64}(undef, K, K)
     for i in 1:K
@@ -36,7 +36,7 @@ function simplex_norm(p)
     return result
 end
 
-function simplex_vec_dist(p, q)
+function vec_dist(p, q)
     K = length(p)
     if K != length(q)
         error("simplexVecDist: vectors must be same length!")
@@ -51,7 +51,7 @@ function simplex_vec_dist(p, q)
     return result
 end
 
-function simplex_vec_outer_d_mat(V)
+function vec_outer_d_mat(V)
     nr, nc = size(V)
     D      = Matrix{Float64}(undef, nr, nr)
     for i in 1:nr
@@ -63,25 +63,25 @@ function simplex_vec_outer_d_mat(V)
 
     for i in 1:nr
         for j in 1:nr
-            D[i, j] = simplex_vec_dist(V[i,:], V[j,:])
+            D[i, j] = vec_dist(V[i,:], V[j,:])
         end
     end
     return D
 end
 
-function simplex_max_d(K)
+function max_d(K)
     t1 = fill(0.0001, K-1)
     t2 = 1 - sum(t1)
     t3 = vcat(t1, t2)
     ct = fill(1/K,K)
-    result = simplex_vec_dist(t3,ct)
+    result = vec_dist(t3,ct)
     return result
 end
 
-function simplex_scale(p, L)
-    np = simplex_norm(p)
+function scale(p, L)
+    np = norm(p)
     ct = L/np
-    result = simplex_multiply(p, ct)
+    result = multiply(p, ct)
     return result
 end
 
