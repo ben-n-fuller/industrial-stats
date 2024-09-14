@@ -1,5 +1,7 @@
 module ParticleSwarm
 
+export search_simplex
+
 import("../geom/geom.jl")
 using .Geom
 
@@ -13,8 +15,6 @@ import("../model/design_initializer.jl")
 using .DesignInitializer
 
 using Distributions, LinearAlgebra
-
-export search_simplex
 
 function search_simplex(;
     N::Int64,                       # := Number of replicate points in design

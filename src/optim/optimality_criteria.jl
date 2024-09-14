@@ -1,4 +1,7 @@
 module OptimalityCriteria
+
+export d_criterion, d_criterion_2, i_criterion, g_criterion
+
 using SpecialFunctions
 using LinearAlgebra
 
@@ -100,5 +103,58 @@ function get_region_moments_matrix(K, model)
         error("(I_criterion) moment matrix for K=$K and model=$model not yet implemented")
     end
 end
+
+## G-criterion -----------------------------------------------------------------
+function G_criterion(X; order)
+    ## function eval
+     K = size(X)[2]
+     Xm          = genDesignMat_mix(X, order = order)
+     msize       = size(Xm)
+     N           = msize[1]
+     p           = msize[2]
+     XpX         = transpose(Xm)*Xm
+ 
+     # we need inv(XpX), first block matrices with small determinants
+     determinant = det(XpX)
+ 
+ 
+     if order == 3.2
+         Xpred = Xpred32
+     elseif order == 3.3
+         Xpred = Xpred33
+     elseif order == 3.4
+         Xpred = Xpred34
+     elseif order == 3.41
+         Xpred = Xpred341
+     elseif order == 4.2
+         Xpred = Xpred42
+     elseif order == 4.3
+         Xpred = Xpred43
+     elseif order == 4.4
+         Xpred = Xpred44
+     else
+         stop("G-grid for this number of factors and model order is not implemented!!")
+     end
+ 
+     if determinant < eps()^3
+         #println(determinant)
+          result = Inf #eps()^(1/2)
+     else
+         #H = Xpred * (XpX \ transpose(Xpred))
+         #H = Xpred * (\(XpX, transpose(Xpred)))
+         #D = diag(N.*H)
+         #Mx = maximum(D)
+         C  = cholesky(XpX, check = false)
+         Z  = \(transpose(C.U), transpose(Xpred))
+         T  = @. N*Z^2
+         D  = sum(T, dims = 1)
+         Mx = maximum(D)
+         #result = 100*p/Mx
+         result = Mx
+ 
+     end
+ 
+     return result
+ end
 
 end
