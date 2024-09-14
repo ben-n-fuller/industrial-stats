@@ -1,110 +1,101 @@
 module CEXCH
 
-export cexch!, cexch
+export cexch
 
 using LinearAlgebra
-using ThreadsX
 
-include("../model/model_builder.jl")
-using .ModelBuilder
-
-include("../model/design_initializer.jl")
-using .DesignInitializer
-
-include("../util/tensor_ops.jl")
-using .TensorOps
-
-function exchange(X, row, x)
-    Xt = copy(X)
-    Xt[row, :] = x
-    Xt
+function basic_score_comparator(a, b)
+    a < b
 end
 
-function remove_small_terms(X; tol=1e-6)
-    indices = findall(x -> abs(x) < tol, X)
-    X[indices] .= 0
-    return X
-end
+function cexch_optimize(
+        X_in::Matrix{Float64}, 
+        obj_crit::Function, 
+        optimizer::Function; 
+        max_num_iters=1000, 
+        score_comparator=basic_score_comparator
+    )
 
-function cexch_optimize(X::Matrix{Float64}, obj_crit::Function; max_iters=1000, num_samples=100)
+    # Copy the input design matrix
+    X = copy(X_in)
+
+    # Get N and K
     N, K = size(X)
 
     # Generate simplex coordinates using identity matrix
-    # The kth column corresponds with the simplex vertex for the kth factor
+    # The kth column corresponds with the simplex vertex for the kth factor in an unconstrained setting
     simplex_coords = I(K)
-
-    # Sample points along line
-    sample_points = range(0.0, 1.0, length=num_samples)
 
     # Initialize objective value
     best_score = obj_crit(X)
 
-    # Pre-allocate memory for designs
-    new_designs = zeros(num_samples, N, K)
-
-    # Initialize metadata
-    cexch_meta = zeros(4)
-    cexch_meta[2] = max_iters
-    cexch_meta[3] = num_samples
-
     # Iterate until no improvement is made
-    for iter in 1:max_iters
+    iter = 0
+    while iter < max_num_iters
         improvement = false
 
         for coord in CartesianIndices(X)
             row, col = coord[1], coord[2]
+
             # Get the current simplex vertex
             v = simplex_coords[:, col]
 
             # Get the direction vector
             d = v - X[row, :]
-            
-            # Generate candidate designs
-            for (i, t) in enumerate(sample_points)
-                new_designs[i, :, :] = exchange(X, row, X[row, :] + t * d)
-            end
 
-            # Compute scores
-            scores = obj_crit(new_designs)
-            score_opt, i_opt = findmin(TensorOps.squeeze(scores))
+            # Optimize the objective function along the direction vector
+            optim_point, score_opt = optimizer(X, row, d, obj_crit)
 
             # Update the design matrix and objective value if improvement is found
-            if score_opt < best_score
+            if score_comparator(score_opt, best_score)
                 best_score = score_opt
-                X = new_designs[i_opt, :, :]
+                X[row, :] .= optim_point
                 improvement = true
             end
         end
 
-        cexch_meta[1] = iter
         if !improvement
             break
         end
+
+        iter += 1
     end
 
-    cexch_meta[4] = best_score
-    return X, cexch_meta
+    return X, best_score, iter
 end
 
-# Simple coordinate exchange algorithm implementation for mixture designs
-function cexch!(X::Array{Float64, 3}, obj_crit::Function; max_iters=1000, num_samples=1000)
-    n = size(X, 1) # number of design matrices
-    meta = zeros(n, 4) # metadata for each design matrix
+function cexch(
+        X::Array{Float64, 3},
+        obj_crit::Function, 
+        optimizer::Function; 
+        max_iters=1000, 
+        score_comparator=basic_score_comparator
+    )
+    
+    # Get the number of initial design matrices
+    n, N, K = size(X) # number of initial design matrices
 
-    # Parallelize over initializations
-    Threads.@threads for i in 1:n
-        X_new, m = cexch_optimize(X[i, :, :], obj_crit, max_iters=max_iters, num_samples=num_samples)
-        X[i, :, :] = X_new
-        meta[i, :] = m
+    # Initialize arrays to store scores and number of iterations    
+    scores = Float64[]
+    num_iterations = Int[]
+    opt_designs = zeros(n, N, K)
+
+    for i in 1:n
+        optimized, best_score, num_iters = cexch_optimize(
+            X[i, :, :], 
+            obj_crit, 
+            optimizer; 
+            max_num_iters=max_iters, 
+            score_comparator=score_comparator
+        )
+
+        push!(scores, best_score)
+        push!(num_iterations, num_iters)
+        opt_designs[i, :, :] .= optimized
     end
 
-    return remove_small_terms(X), meta
-end
-
-# Simple coordinate exchange algorithm implementation for mixture designs
-function cexch(X::Array{Float64, 3}, obj_crit::Function; max_iters=1000, num_samples=1000)
-    X = copy(X)
-    cexch!(X, obj_crit, max_iters=max_iters, num_samples=num_samples)
+    # return scores, num_iterations    
+    return opt_designs, scores, num_iterations
 end
 
 end
