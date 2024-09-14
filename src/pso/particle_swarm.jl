@@ -60,8 +60,6 @@ function search_simplex(;
         use_bounds = false
     end
 
-
-
     ## initialize swarm
     X, V, f, p_best, f_pbest, g_best, f_gbest, l_best, f_lbest, l_bestIndex, neighborHoods = initialize_swarm(; N = N, K = K, S = S, objective = objective, order = order, nn = nn, maxd = maxd, use_bounds = use_bounds, a = a, b = b, centroid = centroid)
 
@@ -197,8 +195,8 @@ function initialize_swarm(; N, K, S, objective, order = nothing, nn, maxd, use_b
     #nInt = S - 10
     if ~use_bounds
         for i in 1:S
-            X0[:, :, i] = DesignInitializer.genRandDesign_mix(N, K)
-            vt          = DesignInitializer.genRandDesign_mix(N, K)
+            X0[:, :, i] = DesignInitializer.generate_mixture_design(N, K)
+            vt          = DesignInitializer.generate_mixture_design(N, K)
             nvt         = Simplex.norm(vt)
             if nvt > maxd
                 vt = Simplex.scale(vt, maxd)
@@ -207,8 +205,8 @@ function initialize_swarm(; N, K, S, objective, order = nothing, nn, maxd, use_b
         end
     else
         for i in 1:S
-            X0[:, :, i] = GibbsSampler.tDirGibbs(N, a, b, undef, centroid)
-            vt          = DesignInitializer.genRandDesign_mix(N, K)
+            X0[:, :, i] = GibbsSampler.sample_truncated_dirichlet(N, a, b, undef, centroid)
+            vt          = DesignInitializer.generate_mixture_design(N, K)
             nvt         = Simplex.norm(vt)
             if nvt > maxd
                 vt = Simplex.scale(vt, maxd)

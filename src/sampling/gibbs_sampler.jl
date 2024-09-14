@@ -1,32 +1,10 @@
 module GibbsSampler
 
-export tDirGibbs
+export sample_truncated_dirichlet
 
 using Distributions
 
-function xiStar(x, i)
-    result =  1 - sum(deleteat!(x, i))
-    return result
-end
-
-function falpha_i(i, a, b, xi_star, n)
-    result = max( a[i]/xi_star, 1 - b[n]/xi_star)
-    return result
-end
-
-function fbeta_i(i, a, b, xi_star, n)
-    result = min( b[i]/xi_star, 1 - a[n]/xi_star)
-end
-
-function uToTbeta(u, s1, s2, ac, bc)
-    Beta_t   = Beta(s1, s2)
-    t1       = u * (cdf(Beta_t, bc) - cdf(Beta_t, ac))
-    t2       = cdf(Beta_t, ac) + t1
-    result   = quantile(Beta_t, t2)
-    return result
-end
-
-function tDirGibbs(N, a, b, gamma, centroid)
+function sample_truncated_dirichlet(N, a, b, gamma, centroid)
 
     n        = length(a)
     n2       = length(b)
@@ -64,6 +42,40 @@ function tDirGibbs(N, a, b, gamma, centroid)
     data = data[2:(N + 1),:]
     checkRanges(data, a, b)
     return data
+end
+
+function xiStar(x, i)
+    result =  1 - sum(deleteat!(x, i))
+    return result
+end
+
+function falpha_i(i, a, b, xi_star, n)
+    result = max( a[i]/xi_star, 1 - b[n]/xi_star)
+    return result
+end
+
+function fbeta_i(i, a, b, xi_star, n)
+    result = min( b[i]/xi_star, 1 - a[n]/xi_star)
+end
+
+function uToTbeta(u, s1, s2, ac, bc)
+    Beta_t   = Beta(s1, s2)
+    t1       = u * (cdf(Beta_t, bc) - cdf(Beta_t, ac))
+    t2       = cdf(Beta_t, ac) + t1
+    result   = quantile(Beta_t, t2)
+    return result
+end
+
+function checkRanges(data, a, b)
+    K = length(a)
+    tt = BitArray(fill(0,K))
+    for i in 1:K
+        tt[i] = all(data[:,i] .>= a[i]) & all(data[:,i] .<= b[i])
+    end
+    result = all(tt)
+    if !result
+        println("warning: extreme values of alpha may cause simulants outside of the polyhedron!")
+    end
 end
 
 end

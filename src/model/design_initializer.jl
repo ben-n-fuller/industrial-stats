@@ -62,8 +62,8 @@ function make_initializer(N, K, model_builder; type="uniform", rng = Random.GLOB
     return (n) -> initialize(N, K, model_builder, n = n, type=type, rng = rng)
 end
 
-## utilities for generating design and model matrices
-function genRandDesign_mix(N, K)
+# Walsh implementation for generating mixture designs
+function generate_mixture_design(N, K)
     # N:= number of points in design (nrows)
     # K:= number of factors (ncols)
     # generate from uniform dirichlet
