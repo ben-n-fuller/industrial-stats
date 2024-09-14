@@ -76,7 +76,7 @@ end
 function jl_optimizer(X, row, d, obj_crit)
     # Perform optimization along the line segment
     opt_func = (t) -> obj_crit_line(t, X, row, d, obj_crit)
-    opt_result = optimize(opt_func, 0.0, 1.0)
+    opt_result = Optim.optimize(opt_func, 0.0, 1.0)
     t_opt = Optim.minimizer(opt_result)
     score_opt = Optim.minimum(opt_result)
 
